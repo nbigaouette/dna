@@ -13,7 +13,7 @@ usbMountPoint = "/media/usb"
 name = "Announce first step"
 action = "echo"
 [step.details]
-string = "This is the first step."
+message = "This is the first step."
 
 [[step]]
 name = "Run simple command"
@@ -31,7 +31,7 @@ abort = "This is an abort message!"
 # name = "Run shell command"
 # action = "shell"
 # [step.details]
-# string = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
+# message = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
 # # Store stdout in an environment variable "directories"
 # stdout = "directories"
 # [step.details.on_success]
@@ -50,10 +50,10 @@ abort = "This is an abort message!"
 name = "Echo the variable previously set"
 action = "echo"
 [step.details]
-string = "directories: ${directories}"
+message = "directories: ${directories}"
 
 [[step]]
 name = "Announce last step"
 action = "echo"
 [step.details]
-string = "This is the last step."
+message = "This is the last step."

@@ -31,7 +31,7 @@ enum OnFailure {
 
 #[derive(Debug)]
 enum Step {
-    Echo {name: String, string: String},
+    Echo {name: String, message: String},
     Run {name: String, command: String, arguments: String, on_success: OnSuccess, on_failure: OnFailure},
     Shell,
     SetEnv,
@@ -75,8 +75,8 @@ fn parse_toml(filename: &str) -> Vec<Step> {
         let details = step.as_table().unwrap().get("details").unwrap().as_table().unwrap();
         let step = match action {
             "echo" => {
-                let string = details.get("string").unwrap().as_str().unwrap().to_string();
-                Step::Echo {name: name, string: string}
+                let message = details.get("message").unwrap().as_str().unwrap().to_string();
+                Step::Echo {name: name, message: message}
             },
             "run" => {
                 let command = details.get("command").unwrap().as_str().unwrap().to_string();
