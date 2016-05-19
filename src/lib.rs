@@ -138,4 +138,19 @@ pub fn execute_steps(filename: &str) {
     let steps = parse_toml(filename);
 
     println!("Steps: {:#?}", steps);
+
+    // Loop over steps
+    let nb_steps = steps.len();
+    for (idx, step) in steps.into_iter().enumerate() {
+        // println!("Step {}/{} -- ", idx+1, nb_steps);
+        match step {
+            Step::Echo {name, message} => {
+                // FIXME: Replace environment variables in 'message'
+                println!("{}", message);
+            },
+            Step::Run {name, command, arguments, on_success, on_failure} => {},
+            _ => unimplemented!(),
+        }
+    }
+
 }
