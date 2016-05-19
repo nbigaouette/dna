@@ -16,6 +16,20 @@ pub fn test() {
 }
 
 #[derive(Debug)]
+enum OnSuccess {
+    Continue,
+    Warn {message: String},
+    Abort {message: String},
+}
+
+#[derive(Debug)]
+enum OnFailure {
+    Continue,
+    Warn {message: String},
+    Abort {message: String},
+}
+
+#[derive(Debug)]
 enum Step {
     Echo {name: String, string: String},
     Run,
