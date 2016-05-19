@@ -6,19 +6,17 @@
 usbMountPoint = "/media/usb"
 
 
-[on.failure.echo_failure]
-[[step]]
+[[on.failure.echo_failure.step]]
 name = "Echo failure"
 action = "echo"
-[step.details]
+[on.failure.echo_failure.step.details]
 string = "Failed!"
 
 
-[on.success.echo_success]
-[[step]]
+[[on.success.echo_success.step]]
 name = "Echo success"
 action = "echo"
-[step.details]
+[on.success.echo_success.step.details]
 string = "Success!"
 
 
