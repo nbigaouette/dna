@@ -4,3 +4,7 @@ mod tests {
     fn it_works() {
     }
 }
+
+pub fn test() {
+    println!("Hello from lib.rs");
+}
