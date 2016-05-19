@@ -11,7 +11,7 @@ usbMountPoint = "/media/usb"
 name = "Echo failure"
 action = "echo"
 [step.details]
-echo = "Failed!"
+string = "Failed!"
 
 
 [on.success.echo_success]
@@ -19,7 +19,7 @@ echo = "Failed!"
 name = "Echo success"
 action = "echo"
 [step.details]
-echo = "Success!"
+string = "Success!"
 
 
 # Use an array of tables for the steps; they will be executed in order.
@@ -27,7 +27,7 @@ echo = "Success!"
 name = "Announce first step"
 action = "echo"
 [step.details]
-echo = "This is the first step."
+string = "This is the first step."
 
 [[step]]
 name = "Run simple command"
@@ -59,10 +59,10 @@ value = "This is the 'explicit' environment variable's content."
 name = "Echo the variable previously set"
 action = "echo"
 [step.details]
-echo = "directories: ${directories}"
+string = "directories: ${directories}"
 
 [[step]]
 name = "Announce last step"
 action = "echo"
 [step.details]
-echo = "This is the last step."
+string = "This is the last step."
