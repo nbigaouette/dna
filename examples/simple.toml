@@ -1,0 +1,68 @@
+# Steps single example
+
+# See https://github.com/toml-lang/toml/blob/master/examples/example-v0.4.0.toml
+
+[variables]
+usbMountPoint = "/media/usb"
+
+
+[on.failure.echo_failure]
+[[step]]
+name = "Echo failure"
+action = "echo"
+[step.details]
+echo = "Failed!"
+
+
+[on.success.echo_success]
+[[step]]
+name = "Echo success"
+action = "echo"
+[step.details]
+echo = "Success!"
+
+
+# Use an array of tables for the steps; they will be executed in order.
+[[step]]
+name = "Announce first step"
+action = "echo"
+[step.details]
+echo = "This is the first step."
+
+[[step]]
+name = "Run simple command"
+action = "run"
+on_failure = "echo_failure"
+on_success = "echo_success"
+[step.details]
+command = "ls"
+arguments = "-la ${usbMountPoint}"
+
+[[step]]
+name = "Run shell command"
+action = "shell"
+on_failure = "echo_failure"
+on_success = "echo_success"
+[step.details]
+string = "ls -la | sed 's|\(d[a-zA-Z0-9\-]\{9\}\).*|\1|g'"
+# Store stdout in an environment variable "directories"
+stdout = "directories"
+
+[[step]]
+name = "Set an environment variable"
+action = "setenv"
+[step.details]
+variable = "explicit"
+value = "This is the 'explicit' environment variable's content."
+
+[[step]]
+name = "Echo the variable previously set"
+action = "echo"
+[step.details]
+echo = "directories: ${directories}"
+
+[[step]]
+name = "Announce last step"
+action = "echo"
+[step.details]
+echo = "This is the last step."
