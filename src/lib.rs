@@ -154,7 +154,44 @@ pub fn execute_steps(filename: &str) {
                 // FIXME: Replace environment variables in 'message'
                 println!("{}", message);
             },
-            Step::Run {name, command, arguments, on_success, on_failure} => {},
+            Step::Run {name, command, arguments, on_success, on_failure} => {
+                let arguments: Vec<&str> = arguments.split(' ').collect();
+                println!("    command: {}   arguments: {:?}", command, arguments);
+                let mut output = std::process::Command::new(command)
+                                                       .args(&arguments)
+                                                       .output()
+                                                       .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
+
+                // println!("output: {:#?}", output);
+
+                // Print stdout
+                println!("{}", String::from_utf8_lossy(&output.stdout));
+                println!("{}", String::from_utf8_lossy(&output.stderr));
+
+                if output.status.success() {
+                    println!("Success!");
+                    match on_success {
+                        OnSuccess::Continue => {},
+                        OnSuccess::Warn {message} => {
+                            println!("WARNING: {}", message);
+                        },
+                        OnSuccess::Abort {message} => {
+                            println!("ABORT: {}", message);
+                        },
+                    }
+                } else {
+                    println!("Failure!");
+                    match on_failure {
+                        OnFailure::Continue => {},
+                        OnFailure::Warn {message} => {
+                            println!("WARNING: {}", message);
+                        },
+                        OnFailure::Abort {message} => {
+                            println!("ABORT: {}", message);
+                        },
+                    }
+                }
+            },
             _ => unimplemented!(),
         }
     }
