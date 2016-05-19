@@ -34,7 +34,7 @@ enum Step {
     Echo {name: String, message: String},
     Run {name: String, command: String, arguments: String, on_success: OnSuccess, on_failure: OnFailure},
     Shell,
-    SetEnv,
+    SetEnv {variable: String, value: String},
 }
 
 
@@ -122,9 +122,12 @@ fn parse_toml(filename: &str) -> Vec<Step> {
 
                 Step::Run {name: name, command: command, arguments: arguments, on_success: on_success, on_failure: on_failure}
             },
+            "setenv" => {
+                let variable = details.get("variable").unwrap().as_str().unwrap().to_string();
+                let value = details.get("value").unwrap().as_str().unwrap().to_string();
+                Step::SetEnv {variable: variable, value: value}
+            },
             // "shell" => {
-            // },
-            // "setenv" => {
             // },
             _ => {
                 println!("Unknown action '{}' in toml file", action);
@@ -191,6 +194,9 @@ pub fn execute_steps(filename: &str) {
                         },
                     }
                 }
+            },
+            Step::SetEnv {variable, value} => {
+                std::env::set_var(variable, value);
             },
             _ => unimplemented!(),
         }

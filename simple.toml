@@ -38,13 +38,13 @@ abort = "This is an abort message!"
 # warn = "This is a warning"
 # [step.details.on_failure]
 # abort = "This is an abort message!"
-#
-# [[step]]
-# name = "Set an environment variable"
-# action = "setenv"
-# [step.details]
-# variable = "explicit"
-# value = "This is the 'explicit' environment variable's content."
+
+[[step]]
+name = "Set an environment variable"
+action = "setenv"
+[step.details]
+variable = "explicit"
+value = "This is the 'explicit' environment variable's content."
 
 [[step]]
 name = "Echo the variable previously set"
