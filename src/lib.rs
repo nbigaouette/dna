@@ -16,8 +16,8 @@ pub fn test() {
 }
 
 #[derive(Debug)]
-    Echo,
 enum Step {
+    Echo {name: String, string: String},
     Run,
     Shell,
     SetEnv,
@@ -58,6 +58,33 @@ fn parse_toml(filename: &str) -> Vec<Step> {
 
     // Parse "steps" table
     let mut steps = Vec::<Step>::with_capacity(10);
+
+    for step in toml.get("step").unwrap().as_slice().unwrap() {
+        let action = step.as_table().unwrap().get("action").unwrap().as_str().unwrap();
+        let name = step.as_table().unwrap().get("name").unwrap().as_str().unwrap().to_string();
+        let details = step.as_table().unwrap().get("details").unwrap().as_table().unwrap();
+        println!("name:   {}", name);
+        println!("action: {}", action);
+        let step = match action {
+            "echo" => {
+                let string = details.get("string").unwrap().as_str().unwrap().to_string();
+                println!("string: {}", string);
+                Step::Echo {name: name, string: string}
+            },
+            // "shell" => {
+            // },
+            // "run" => {
+            // },
+            // "setenv" => {
+            // },
+            _ => {
+                println!("Unknown action '{}' in toml file", action);
+                unimplemented!();
+            },
+        };
+        unimplemented!();
+        steps.push(step);
+    }
 
     steps
 }
