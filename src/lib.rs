@@ -47,13 +47,25 @@ fn parse_toml(filename: &str) -> Vec<Steps> {
         panic!("Error parsing toml file.");
     });
 
-    // toml
-    unimplemented!();
+    println!("toml: {:#?}", toml);
+    println!("toml: {:?}", toml.len());
+
+    // Parse "on" table
+    // unimplemented!();
+
+    // Parse "variables" table
+    // unimplemented!();
+
+    // Parse "steps" table
+    let steps: Vec<Steps> = Vec::with_capacity(10);
+
+
+    steps
 }
 
 pub fn execute_steps(filename: &str) {
 
     let steps = parse_toml(filename);
 
-    println!("Steps: {:?}", steps);
+    println!("Steps: {:#?}", steps);
 }
