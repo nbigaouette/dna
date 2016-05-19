@@ -27,24 +27,24 @@ warn = "This is a warning"
 abort = "This is an abort message!"
 
 
-[[step]]
-name = "Run shell command"
-action = "shell"
-[step.details]
-string = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
-# Store stdout in an environment variable "directories"
-stdout = "directories"
-[step.details.on_success]
-warn = "This is a warning"
-[step.details.on_failure]
-abort = "This is an abort message!"
-
-[[step]]
-name = "Set an environment variable"
-action = "setenv"
-[step.details]
-variable = "explicit"
-value = "This is the 'explicit' environment variable's content."
+# [[step]]
+# name = "Run shell command"
+# action = "shell"
+# [step.details]
+# string = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
+# # Store stdout in an environment variable "directories"
+# stdout = "directories"
+# [step.details.on_success]
+# warn = "This is a warning"
+# [step.details.on_failure]
+# abort = "This is an abort message!"
+#
+# [[step]]
+# name = "Set an environment variable"
+# action = "setenv"
+# [step.details]
+# variable = "explicit"
+# value = "This is the 'explicit' environment variable's content."
 
 [[step]]
 name = "Echo the variable previously set"
