@@ -6,18 +6,6 @@
 usbMountPoint = "/media/usb"
 
 
-[[on.failure.echo_failure.step]]
-name = "Echo failure"
-action = "echo"
-[on.failure.echo_failure.step.details]
-string = "Failed!"
-
-
-[[on.success.echo_success.step]]
-name = "Echo success"
-action = "echo"
-[on.success.echo_success.step.details]
-string = "Success!"
 
 
 # Use an array of tables for the steps; they will be executed in order.
@@ -33,8 +21,11 @@ action = "run"
 [step.details]
 command = "ls"
 arguments = "-la ${usbMountPoint}"
-on_failure = "echo_failure"
-on_success = "echo_success"
+[step.details.on_success]
+warn = "This is a warning"
+[step.details.on_failure]
+abort = "This is an abort message!"
+
 
 [[step]]
 name = "Run shell command"
@@ -43,8 +34,10 @@ action = "shell"
 string = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
 # Store stdout in an environment variable "directories"
 stdout = "directories"
-on_failure = "echo_failure"
-on_success = "echo_success"
+[step.details.on_success]
+warn = "This is a warning"
+[step.details.on_failure]
+abort = "This is an abort message!"
 
 [[step]]
 name = "Set an environment variable"

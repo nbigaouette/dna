@@ -85,22 +85,39 @@ fn parse_toml(filename: &str) -> Vec<Step> {
             "run" => {
                 let command = details.get("command").unwrap().as_str().unwrap().to_string();
                 let arguments = details.get("arguments").unwrap().as_str().unwrap().to_string();
+
                 let on_success = match details.get("on_success") {
-                    None => OnSuccess::Continue,
-                    Some(on_success_string) => {
+                    None => {
+                        println!("WARNING: No 'on_success' set for {:?}, default of 'OnSuccess::Continue'", name);
                         OnSuccess::Continue
-                        // match on_success_string {
-                        //     "continue" => OnSuccess::Continue,
-                        //     "warn" => ,
-                        // }
                     },
+                    Some(toml_value) => {
+                        let table = toml_value.as_table().unwrap();
+                        let (message_type, message) = table.iter().nth(0).unwrap();
+                        match message_type.as_ref() {
+                            "warn" => OnSuccess::Warn {message: message.as_str().unwrap().to_string()},
+                            "abort" => OnSuccess::Abort {message: message.as_str().unwrap().to_string()},
+                            _ => unimplemented!()
+                        }
+                    }
                 };
+
                 let on_failure = match details.get("on_failure") {
-                    None => OnFailure::Continue,
-                    Some(on_failure_string) => {
+                    None => {
+                        println!("WARNING: No 'on_failure' set for {:?}, default of 'OnFailure::Continue'", name);
                         OnFailure::Continue
                     },
+                    Some(toml_value) => {
+                        let table = toml_value.as_table().unwrap();
+                        let (message_type, message) = table.iter().nth(0).unwrap();
+                        match message_type.as_ref() {
+                            "warn" => OnFailure::Warn {message: message.as_str().unwrap().to_string()},
+                            "abort" => OnFailure::Abort {message: message.as_str().unwrap().to_string()},
+                            _ => unimplemented!()
+                        }
+                    }
                 };
+
                 Step::Run {name: name, command: command, arguments: arguments, on_success: on_success, on_failure: on_failure}
             },
             // "shell" => {
