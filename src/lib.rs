@@ -32,7 +32,7 @@ enum OnFailure {
 #[derive(Debug)]
 enum Step {
     Echo {name: String, string: String},
-    Run,
+    Run {name: String, command: String, arguments: String, on_success: OnSuccess, on_failure: OnFailure},
     Shell,
     SetEnv,
 }
@@ -82,9 +82,28 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                 let string = details.get("string").unwrap().as_str().unwrap().to_string();
                 Step::Echo {name: name, string: string}
             },
+            "run" => {
+                let command = details.get("command").unwrap().as_str().unwrap().to_string();
+                let arguments = details.get("arguments").unwrap().as_str().unwrap().to_string();
+                let on_success = match details.get("on_success") {
+                    None => OnSuccess::Continue,
+                    Some(on_success_string) => {
+                        OnSuccess::Continue
+                        // match on_success_string {
+                        //     "continue" => OnSuccess::Continue,
+                        //     "warn" => ,
+                        // }
+                    },
+                };
+                let on_failure = match details.get("on_failure") {
+                    None => OnFailure::Continue,
+                    Some(on_failure_string) => {
+                        OnFailure::Continue
+                    },
+                };
+                Step::Run {name: name, command: command, arguments: arguments, on_success: on_success, on_failure: on_failure}
+            },
             // "shell" => {
-            // },
-            // "run" => {
             // },
             // "setenv" => {
             // },
