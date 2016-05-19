@@ -62,10 +62,6 @@ fn parse_toml(filename: &str) -> Vec<Step> {
     });
 
     // println!("toml: {:#?}", toml);
-    println!("toml: {:?}", toml.len());
-
-    // Parse "on" table
-    // unimplemented!();
 
     // Parse "variables" table
     // unimplemented!();
@@ -129,7 +125,7 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                 unimplemented!();
             },
         };
-        println!("Step: {:?}", step);
+        // println!("Step: {:?}", step);
 
         steps.push(step);
     }
