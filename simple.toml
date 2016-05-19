@@ -44,7 +44,7 @@ action = "shell"
 on_failure = "echo_failure"
 on_success = "echo_success"
 [step.details]
-string = "ls -la | sed 's|\(d[a-zA-Z0-9\-]\{9\}\).*|\1|g'"
+string = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
 # Store stdout in an environment variable "directories"
 stdout = "directories"
 
