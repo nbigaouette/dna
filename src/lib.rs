@@ -80,7 +80,13 @@ fn parse_toml(filename: &str) -> Vec<Step> {
             },
             "run" => {
                 let command = details.get("command").unwrap().as_str().unwrap().to_string();
-                let arguments = details.get("arguments").unwrap().as_str().unwrap().to_string();
+
+                // Allow non-existing 'arguments' field, defaulting to empty string.
+                let arguments_option = details.get("arguments");
+                let arguments = match arguments_option {
+                    None => String::new(),
+                    Some(arguments_toml_value) => arguments_toml_value.as_str().unwrap().to_string(),
+                };
 
                 let on_success = match details.get("on_success") {
                     None => {
