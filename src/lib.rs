@@ -180,10 +180,10 @@ pub fn execute_steps(filename: &str) {
                         },
                         OnSuccess::Abort {message} => {
                             println!("ABORT: {}", message);
+                            break;
                         },
                     }
                 } else {
-                    println!("Failure!");
                     match on_failure {
                         OnFailure::Continue => {},
                         OnFailure::Warn {message} => {
@@ -191,6 +191,7 @@ pub fn execute_steps(filename: &str) {
                         },
                         OnFailure::Abort {message} => {
                             println!("ABORT: {}", message);
+                            break;
                         },
                     }
                 }
