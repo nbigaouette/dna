@@ -30,21 +30,21 @@ string = "This is the first step."
 [[step]]
 name = "Run simple command"
 action = "run"
-on_failure = "echo_failure"
-on_success = "echo_success"
 [step.details]
 command = "ls"
 arguments = "-la ${usbMountPoint}"
+on_failure = "echo_failure"
+on_success = "echo_success"
 
 [[step]]
 name = "Run shell command"
 action = "shell"
-on_failure = "echo_failure"
-on_success = "echo_success"
 [step.details]
 string = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
 # Store stdout in an environment variable "directories"
 stdout = "directories"
+on_failure = "echo_failure"
+on_success = "echo_success"
 
 [[step]]
 name = "Set an environment variable"
