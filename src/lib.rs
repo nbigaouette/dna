@@ -61,7 +61,7 @@ fn parse_toml(filename: &str) -> Vec<Step> {
         panic!("Error parsing toml file.");
     });
 
-    println!("toml: {:#?}", toml);
+    // println!("toml: {:#?}", toml);
     println!("toml: {:?}", toml.len());
 
     // Parse "on" table
