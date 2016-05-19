@@ -57,7 +57,7 @@ fn parse_toml(filename: &str) -> Vec<Steps> {
     // unimplemented!();
 
     // Parse "steps" table
-    let steps: Vec<Steps> = Vec::with_capacity(10);
+    let mut steps = Vec::<Steps>::with_capacity(10);
 
 
     steps
