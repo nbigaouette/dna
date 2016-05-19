@@ -16,15 +16,15 @@ pub fn test() {
 }
 
 #[derive(Debug)]
-enum Steps {
     Echo,
+enum Step {
     Run,
     Shell,
     SetEnv,
 }
 
 
-fn parse_toml(filename: &str) -> Vec<Steps> {
+fn parse_toml(filename: &str) -> Vec<Step> {
 
     println!("Reading toml file {}", filename);
 
@@ -57,8 +57,7 @@ fn parse_toml(filename: &str) -> Vec<Steps> {
     // unimplemented!();
 
     // Parse "steps" table
-    let mut steps = Vec::<Steps>::with_capacity(10);
-
+    let mut steps = Vec::<Step>::with_capacity(10);
 
     steps
 }
