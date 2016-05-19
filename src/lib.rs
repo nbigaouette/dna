@@ -63,12 +63,9 @@ fn parse_toml(filename: &str) -> Vec<Step> {
         let action = step.as_table().unwrap().get("action").unwrap().as_str().unwrap();
         let name = step.as_table().unwrap().get("name").unwrap().as_str().unwrap().to_string();
         let details = step.as_table().unwrap().get("details").unwrap().as_table().unwrap();
-        println!("name:   {}", name);
-        println!("action: {}", action);
         let step = match action {
             "echo" => {
                 let string = details.get("string").unwrap().as_str().unwrap().to_string();
-                println!("string: {}", string);
                 Step::Echo {name: name, string: string}
             },
             // "shell" => {
@@ -82,7 +79,8 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                 unimplemented!();
             },
         };
-        unimplemented!();
+        println!("Step: {:?}", step);
+
         steps.push(step);
     }
 
