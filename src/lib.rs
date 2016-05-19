@@ -10,6 +10,6 @@ pub fn test() {
 }
 
 
-pub fn read_steps(filename: &str) {
+pub fn execute_steps(filename: &str) {
     println!("Reading file {:?}", filename);
 }
