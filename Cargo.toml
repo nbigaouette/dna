@@ -2,6 +2,7 @@
 name = "dna"
 version = "0.1.0"
 authors = ["Nicolas Bigaouette <nbigaouette@gmail.com>"]
+license = "MIT"
 
 [dependencies]
 toml = "0.1"
