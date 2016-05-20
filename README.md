@@ -4,4 +4,4 @@ that tend to grow out of hands.
 
 # License
 
-This code is distributed under the terms of the MIT License and is Copyright 2016 Nicolas Bigaouette.
+This code is distributed under the terms of the [MIT License](https://opensource.org/licenses/MIT) and is Copyright 2016 Nicolas Bigaouette.
