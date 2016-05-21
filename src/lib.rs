@@ -234,13 +234,6 @@ pub fn execute_steps(filename: &str) {
                                                        .output()
                                                        .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
 
-                // println!("output: {:#?}", output);
-
-
-                // Print stdout
-                println!("{}", String::from_utf8_lossy(&output.stdout));
-                println!("{}", String::from_utf8_lossy(&output.stderr));
-
                 if output.status.success() {
                     match on_success {
                         OnSuccess::Continue => {},
@@ -283,7 +276,6 @@ pub fn execute_steps(filename: &str) {
                                                        .output()
                                                        .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
 
-               // Print stdout
                 match stdout {
                     Pipe::Null => { },
                     Pipe::StdOut => {
