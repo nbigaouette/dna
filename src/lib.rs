@@ -1,4 +1,5 @@
 extern crate toml;
+extern crate shellexpand;
 
 // Import traits
 use std::io::prelude::Read;
@@ -154,10 +155,14 @@ pub fn execute_steps(filename: &str) {
         // println!("Step {}/{} -- ", idx+1, nb_steps);
         match step {
             Step::Echo {name, message} => {
-                // FIXME: Replace environment variables in 'message'
-                println!("{}", message);
+                // NOTE: If an environment variable is non-existing, the following line will panic.
+                println!("{}", shellexpand::full(&message).unwrap());
             },
             Step::Run {name, command, arguments, on_success, on_failure} => {
+                // NOTE: If an environment variable is non-existing, the following line will panic.
+                let command: String = shellexpand::full(&command).unwrap().to_string();
+                // NOTE: If an environment variable is non-existing, the following line will panic.
+                let arguments: String = shellexpand::full(&arguments).unwrap().to_string();
                 let arguments: Vec<&str> = arguments.split(' ').collect();
                 println!("    command: {}   arguments: {:?}", command, arguments);
                 let mut output = std::process::Command::new(command)

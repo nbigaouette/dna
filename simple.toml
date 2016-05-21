@@ -13,7 +13,7 @@ usbMountPoint = "/media/usb"
 name = "Announce first step"
 action = "echo"
 [step.details]
-message = "This is the first step."
+message = "This is the first step (home: ${HOME})."
 
 [[step]]
 name = "Run simple command"

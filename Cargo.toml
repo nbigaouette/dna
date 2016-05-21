@@ -6,3 +6,4 @@ license = "MIT"
 
 [dependencies]
 toml = "0.1"
+shellexpand = "0.1"
