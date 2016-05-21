@@ -242,7 +242,6 @@ pub fn execute_steps(filename: &str) {
                 println!("{}", String::from_utf8_lossy(&output.stderr));
 
                 if output.status.success() {
-                    println!("Success!");
                     match on_success {
                         OnSuccess::Continue => {},
                         OnSuccess::Echo {message} => {
@@ -304,7 +303,6 @@ pub fn execute_steps(filename: &str) {
                 };
 
                if output.status.success() {
-                   println!("Success!");
                    match on_success {
                        OnSuccess::Continue => {},
                        OnSuccess::Echo {message} => {
