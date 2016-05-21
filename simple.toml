@@ -21,6 +21,12 @@ action = "run"
 [step.details]
 command = "ls"
 arguments = "-la ${usbMountPoint}"
+[step.details.on_success]
+warn = "This is a warning"
+[step.details.on_failure]
+abort = "USB mount point does not exists!"
+
+
 [[step]]
 name = "Run shell command, with working pipes"
 action = "shell"
@@ -32,15 +38,21 @@ echo = "Success!"
 [step.details.on_failure]
 abort = "This is an abort message!"
 
-# [[step]]
-# name = "Run shell command and store in variable"
-# action = "shell"
-# [step.details]
-# command = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
-# # Store stdout in an environment variable "listing"
-# stdout = "listing"
-# [step.details.on_success]
-# echo = "listing: ${listing}"
+[[step]]
+name = "Run shell command and store in variable"
+action = "shell"
+[step.details]
+command = "ls -la | grep Cargo"
+# Store stdout in an environment variable "listing"
+stdout = "listing"
+[step.details.on_success]
+echo = "listing: ${listing}"
+
+[[step]]
+name = "Echo the variable previously set (listing)"
+action = "echo"
+[step.details]
+message = "listing: ${listing}"
 
 [[step]]
 name = "Set an environment variable"
@@ -50,10 +62,10 @@ variable = "explicit"
 value = "This is the 'explicit' environment variable's content."
 
 [[step]]
-name = "Echo the variable previously set"
+name = "Echo the variable previously set (explicit)"
 action = "echo"
 [step.details]
-message = "directories: ${directories}"
+message = "explicit: ${explicit}"
 
 [[step]]
 name = "Announce last step"
