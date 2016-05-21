@@ -65,7 +65,11 @@ fn parse_toml(filename: &str) -> Vec<Step> {
     // println!("toml: {:#?}", toml);
 
     // Parse "variables" table
-    // unimplemented!();
+    for (variable, value) in toml.get("variables").unwrap().as_table().unwrap() {
+        let value = value.as_str().unwrap();
+        // println!("variable: {}   value: {}", variable, value);
+        std::env::set_var(variable, value);
+    }
 
     // Parse "steps" table
     let mut steps = Vec::<Step>::with_capacity(10);
