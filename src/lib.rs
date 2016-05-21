@@ -209,14 +209,16 @@ pub fn execute_steps(filename: &str) {
                 let command: String = shellexpand::full(&command).unwrap().to_string();
                 // NOTE: If an environment variable is non-existing, the following line will panic.
                 let arguments: String = shellexpand::full(&arguments).unwrap().to_string();
+                println!("    command: {} {}", command, arguments);
                 let arguments: Vec<&str> = arguments.split(' ').collect();
-                println!("    command: {}   arguments: {:?}", command, arguments);
-                let mut output = std::process::Command::new(command)
+                // println!("    command: {}   arguments: {:?}", command, arguments);
+                let output = std::process::Command::new(command)
                                                        .args(&arguments)
                                                        .output()
                                                        .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
 
                 // println!("output: {:#?}", output);
+
 
                 // Print stdout
                 println!("{}", String::from_utf8_lossy(&output.stdout));
