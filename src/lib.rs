@@ -36,7 +36,7 @@ enum OnFailure {
 enum Step {
     Echo {name: String, message: String},
     Run {name: String, command: String, arguments: String, on_success: OnSuccess, on_failure: OnFailure},
-    Shell,
+    Shell {name: String, command: String, on_success: OnSuccess, on_failure: OnFailure},
     SetEnv {variable: String, value: String},
 }
 
@@ -136,8 +136,46 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                 let value = details.get("value").unwrap().as_str().unwrap().to_string();
                 Step::SetEnv {variable: variable, value: value}
             },
-            // "shell" => {
-            // },
+            "shell" => {
+                let command = details.get("command").unwrap().as_str().unwrap().to_string();
+                // FIXME: Add possibility to store stdout/stderr in variable.
+
+                let on_success = match details.get("on_success") {
+                    None => {
+                        println!("WARNING: No 'on_success' set for {:?}, default of 'OnSuccess::Continue'", name);
+                        OnSuccess::Continue
+                    },
+                    Some(toml_value) => {
+                        let table = toml_value.as_table().unwrap();
+                        let (message_type, message) = table.iter().nth(0).unwrap();
+                        match message_type.as_ref() {
+                            "echo" => OnSuccess::Echo {message: message.as_str().unwrap().to_string()},
+                            "warn" => OnSuccess::Warn {message: message.as_str().unwrap().to_string()},
+                            "abort" => OnSuccess::Abort {message: message.as_str().unwrap().to_string()},
+                            _ => unimplemented!()
+                        }
+                    }
+                };
+
+                let on_failure = match details.get("on_failure") {
+                    None => {
+                        println!("WARNING: No 'on_failure' set for {:?}, default of 'OnFailure::Continue'", name);
+                        OnFailure::Continue
+                    },
+                    Some(toml_value) => {
+                        let table = toml_value.as_table().unwrap();
+                        let (message_type, message) = table.iter().nth(0).unwrap();
+                        match message_type.as_ref() {
+                            "echo" => OnFailure::Echo {message: message.as_str().unwrap().to_string()},
+                            "warn" => OnFailure::Warn {message: message.as_str().unwrap().to_string()},
+                            "abort" => OnFailure::Abort {message: message.as_str().unwrap().to_string()},
+                            _ => unimplemented!()
+                        }
+                    }
+                };
+
+                Step::Shell {name: name, command: command, on_success: on_success, on_failure: on_failure}
+            },
             _ => {
                 println!("Unknown action '{}' in toml file", action);
                 unimplemented!();
@@ -218,7 +256,50 @@ pub fn execute_steps(filename: &str) {
             Step::SetEnv {variable, value} => {
                 std::env::set_var(variable, value);
             },
-            _ => unimplemented!(),
+            Step::Shell {name, command, on_success, on_failure} => {
+                let shell = "sh";
+                println!("    command: {} -c '{}'", shell, command);
+                let output = std::process::Command::new(shell)
+                                                       .arg("-c")
+                                                       .arg(command)
+                                                       .output()
+                                                       .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
+
+               // Print stdout
+               println!("{}", String::from_utf8_lossy(&output.stdout));
+               println!("{}", String::from_utf8_lossy(&output.stderr));
+
+               if output.status.success() {
+                   println!("Success!");
+                   match on_success {
+                       OnSuccess::Continue => {},
+                       OnSuccess::Echo {message} => {
+                           println!("{}", message);
+                       },
+                       OnSuccess::Warn {message} => {
+                           println!("WARNING: {}", message);
+                       },
+                       OnSuccess::Abort {message} => {
+                           println!("ABORT: {}", message);
+                           break;
+                       },
+                   }
+               } else {
+                   match on_failure {
+                       OnFailure::Continue => {},
+                       OnFailure::Echo {message} => {
+                           println!("{}", message);
+                       },
+                       OnFailure::Warn {message} => {
+                           println!("WARNING: {}", message);
+                       },
+                       OnFailure::Abort {message} => {
+                           println!("ABORT: {}", message);
+                           break;
+                       },
+                   }
+               }
+            },
         }
     }
 

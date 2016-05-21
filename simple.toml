@@ -21,23 +21,26 @@ action = "run"
 [step.details]
 command = "ls"
 arguments = "-la ${usbMountPoint}"
+[[step]]
+name = "Run shell command, with working pipes"
+action = "shell"
+[step.details]
+command = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
+# command = "ls -la | grep Cargo"
 [step.details.on_success]
-warn = "This is a warning"
+echo = "Success!"
 [step.details.on_failure]
 abort = "This is an abort message!"
 
-
 # [[step]]
-# name = "Run shell command"
+# name = "Run shell command and store in variable"
 # action = "shell"
 # [step.details]
-# message = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
-# # Store stdout in an environment variable "directories"
-# stdout = "directories"
+# command = "ls -la | sed 's|\\(d[a-zA-Z0-9\\-]\\{9\\}\\).*|\\1|g'"
+# # Store stdout in an environment variable "listing"
+# stdout = "listing"
 # [step.details.on_success]
-# warn = "This is a warning"
-# [step.details.on_failure]
-# abort = "This is an abort message!"
+# echo = "listing: ${listing}"
 
 [[step]]
 name = "Set an environment variable"
