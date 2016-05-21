@@ -245,13 +245,13 @@ pub fn execute_steps(filename: &str) {
                     match on_success {
                         OnSuccess::Continue => {},
                         OnSuccess::Echo {message} => {
-                            println!("{}", message);
+                            println!("{}", shellexpand::full(&message).unwrap());
                         },
                         OnSuccess::Warn {message} => {
-                            println!("WARNING: {}", message);
+                            println!("WARNING: {}", shellexpand::full(&message).unwrap());
                         },
                         OnSuccess::Abort {message} => {
-                            println!("ABORT: {}", message);
+                            println!("ABORT: {}", shellexpand::full(&message).unwrap());
                             break;
                         },
                     }
@@ -259,13 +259,13 @@ pub fn execute_steps(filename: &str) {
                     match on_failure {
                         OnFailure::Continue => {},
                         OnFailure::Echo {message} => {
-                            println!("{}", message);
+                            println!("{}", shellexpand::full(&message).unwrap());
                         },
                         OnFailure::Warn {message} => {
-                            println!("WARNING: {}", message);
+                            println!("WARNING: {}", shellexpand::full(&message).unwrap());
                         },
                         OnFailure::Abort {message} => {
-                            println!("ABORT: {}", message);
+                            println!("ABORT: {}", shellexpand::full(&message).unwrap());
                             break;
                         },
                     }
@@ -306,13 +306,13 @@ pub fn execute_steps(filename: &str) {
                    match on_success {
                        OnSuccess::Continue => {},
                        OnSuccess::Echo {message} => {
-                           println!("{}", message);
+                           println!("{}", shellexpand::full(&message).unwrap());
                        },
                        OnSuccess::Warn {message} => {
-                           println!("WARNING: {}", message);
+                           println!("WARNING: {}", shellexpand::full(&message).unwrap());
                        },
                        OnSuccess::Abort {message} => {
-                           println!("ABORT: {}", message);
+                           println!("ABORT: {}", shellexpand::full(&message).unwrap());
                            break;
                        },
                    }
@@ -320,13 +320,13 @@ pub fn execute_steps(filename: &str) {
                    match on_failure {
                        OnFailure::Continue => {},
                        OnFailure::Echo {message} => {
-                           println!("{}", message);
+                           println!("{}", shellexpand::full(&message).unwrap());
                        },
                        OnFailure::Warn {message} => {
-                           println!("WARNING: {}", message);
+                           println!("WARNING: {}", shellexpand::full(&message).unwrap());
                        },
                        OnFailure::Abort {message} => {
-                           println!("ABORT: {}", message);
+                           println!("ABORT: {}", shellexpand::full(&message).unwrap());
                            break;
                        },
                    }
