@@ -19,6 +19,7 @@ pub fn test() {
 #[derive(Debug)]
 enum OnSuccess {
     Continue,
+    Echo {message: String},
     Warn {message: String},
     Abort {message: String},
 }
@@ -26,6 +27,7 @@ enum OnSuccess {
 #[derive(Debug)]
 enum OnFailure {
     Continue,
+    Echo {message: String},
     Warn {message: String},
     Abort {message: String},
 }
@@ -102,6 +104,7 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                         let table = toml_value.as_table().unwrap();
                         let (message_type, message) = table.iter().nth(0).unwrap();
                         match message_type.as_ref() {
+                            "echo" => OnSuccess::Echo {message: message.as_str().unwrap().to_string()},
                             "warn" => OnSuccess::Warn {message: message.as_str().unwrap().to_string()},
                             "abort" => OnSuccess::Abort {message: message.as_str().unwrap().to_string()},
                             _ => unimplemented!()
@@ -118,6 +121,7 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                         let table = toml_value.as_table().unwrap();
                         let (message_type, message) = table.iter().nth(0).unwrap();
                         match message_type.as_ref() {
+                            "echo" => OnFailure::Echo {message: message.as_str().unwrap().to_string()},
                             "warn" => OnFailure::Warn {message: message.as_str().unwrap().to_string()},
                             "abort" => OnFailure::Abort {message: message.as_str().unwrap().to_string()},
                             _ => unimplemented!()
@@ -184,6 +188,9 @@ pub fn execute_steps(filename: &str) {
                     println!("Success!");
                     match on_success {
                         OnSuccess::Continue => {},
+                        OnSuccess::Echo {message} => {
+                            println!("{}", message);
+                        },
                         OnSuccess::Warn {message} => {
                             println!("WARNING: {}", message);
                         },
@@ -195,6 +202,9 @@ pub fn execute_steps(filename: &str) {
                 } else {
                     match on_failure {
                         OnFailure::Continue => {},
+                        OnFailure::Echo {message} => {
+                            println!("{}", message);
+                        },
                         OnFailure::Warn {message} => {
                             println!("WARNING: {}", message);
                         },
