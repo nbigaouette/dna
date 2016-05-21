@@ -33,10 +33,19 @@ enum OnFailure {
 }
 
 #[derive(Debug)]
+enum Pipe {
+    Null,
+    StdOut,
+    StdErr,
+    Variable {name: String},
+    File {filename: String},
+}
+
+#[derive(Debug)]
 enum Step {
     Echo {name: String, message: String},
     Run {name: String, command: String, arguments: String, on_success: OnSuccess, on_failure: OnFailure},
-    Shell {name: String, command: String, on_success: OnSuccess, on_failure: OnFailure},
+    Shell {name: String, command: String, stdout: Pipe, on_success: OnSuccess, on_failure: OnFailure},
     SetEnv {variable: String, value: String},
 }
 
@@ -138,7 +147,15 @@ fn parse_toml(filename: &str) -> Vec<Step> {
             },
             "shell" => {
                 let command = details.get("command").unwrap().as_str().unwrap().to_string();
-                // FIXME: Add possibility to store stdout/stderr in variable.
+
+                let stdout = match details.get("stdout") {
+                    None => {
+                        Pipe::StdOut
+                    },
+                    Some(toml_value) => {
+                        Pipe::Variable {name: toml_value.as_str().unwrap().to_owned()}
+                    }
+                };
 
                 let on_success = match details.get("on_success") {
                     None => {
@@ -174,7 +191,7 @@ fn parse_toml(filename: &str) -> Vec<Step> {
                     }
                 };
 
-                Step::Shell {name: name, command: command, on_success: on_success, on_failure: on_failure}
+                Step::Shell {name: name, command: command, stdout: stdout, on_success: on_success, on_failure: on_failure}
             },
             _ => {
                 println!("Unknown action '{}' in toml file", action);
@@ -258,7 +275,7 @@ pub fn execute_steps(filename: &str) {
             Step::SetEnv {variable, value} => {
                 std::env::set_var(variable, value);
             },
-            Step::Shell {name, command, on_success, on_failure} => {
+            Step::Shell {name, command, stdout, on_success, on_failure} => {
                 let shell = "sh";
                 println!("    command: {} -c '{}'", shell, command);
                 let output = std::process::Command::new(shell)
@@ -268,8 +285,23 @@ pub fn execute_steps(filename: &str) {
                                                        .unwrap_or_else(|e| { panic!("failed to execute process: {}", e) });
 
                // Print stdout
-               println!("{}", String::from_utf8_lossy(&output.stdout));
-               println!("{}", String::from_utf8_lossy(&output.stderr));
+                match stdout {
+                    Pipe::Null => { },
+                    Pipe::StdOut => {
+                        println!("{}", String::from_utf8_lossy(&output.stdout));
+                    },
+                    Pipe::StdErr => {
+                        // FIXME: Outout to stderr, not stdout
+                        unimplemented!();
+                    },
+                    Pipe::Variable {name} => {
+                        std::env::set_var(name, String::from_utf8_lossy(&output.stdout).into_owned());
+                    },
+                    Pipe::File {filename} => {
+                        // FIXME: Save to file
+                        unimplemented!();
+                    }
+                };
 
                if output.status.success() {
                    println!("Success!");
